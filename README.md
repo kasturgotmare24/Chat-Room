@@ -52,7 +52,7 @@ ChatRoom/
 ```
 
 ## 🏆 Why Use ChatRoom?
-✨ Quick Setup – No database required, just clone & run!
+✨ Quick Setup – No database required, just clone & run!<br>
 ✨ Fast & Lightweight – Simple yet effective chat system.
 ✨ Beginner-Friendly – Great for learning frontend-backend integration.
 ✨ Open Source – Contribute, modify, and improve the project!
