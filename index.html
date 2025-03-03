@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Box</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: #f0f2f5;
+        font-family: Arial, sans-serif;
+      }
+      .chat-wrapper {
+        display: flex;
+        gap: 20px;
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      .chat-container {
+        width: 320px;
+        border: 2px solid #007bff;
+        border-radius: 10px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+      }
+      .messages {
+        height: 350px;
+        overflow-y: auto;
+        border-bottom: 2px solid #007bff;
+        padding: 10px;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .message {
+        max-width: 80%;
+        padding: 8px 12px;
+        border-radius: 12px;
+        word-wrap: break-word;
+        font-size: 14px;
+      }
+      .sent {
+        align-self: flex-start;
+        background: #d1e7ff;
+      }
+      .received {
+        align-self: flex-end;
+        background: #e0e0e0;
+      }
+      .input-area {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        padding: 8px 12px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chat-wrapper">
+      <div class="chat-container">
+        <h3>Chat Box 1</h3>
+        <div class="messages" id="chat1"></div>
+        <div class="input-area">
+          <input
+            type="text"
+            id="message1"
+            placeholder="Type a message"
+            onkeypress="handleKeyPress(event, 'User1', 'message1')"
+          />
+          <button onclick="sendMessage('User1', 'message1')">Send</button>
+        </div>
+      </div>
+
+      <div class="chat-container">
+        <h3>Chat Box 2</h3>
+        <div class="messages" id="chat2"></div>
+        <div class="input-area">
+          <input
+            type="text"
+            id="message2"
+            placeholder="Type a message"
+            onkeypress="handleKeyPress(event, 'User2', 'message2')"
+          />
+          <button onclick="sendMessage('User2', 'message2')">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function sendMessage(user, inputId) {
+        let message = document.getElementById(inputId).value.trim();
+        if (message === "") return;
+
+        fetch("save_chat.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user: user, message: message }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status === "success") {
+              document.getElementById(inputId).value = "";
+              loadMessages();
+            } else {
+              console.error("Error:", data.message);
+            }
+          })
+          .catch((error) => console.error("Fetch Error:", error));
+      }
+
+      function loadMessages() {
+        fetch("chat.json?" + new Date().getTime())
+          .then((response) => response.json())
+          .then((data) => {
+            let chat1 = document.getElementById("chat1");
+            let chat2 = document.getElementById("chat2");
+            chat1.innerHTML = "";
+            chat2.innerHTML = "";
+
+            data.forEach((msg) => {
+              let msgDiv = document.createElement("div");
+              msgDiv.classList.add("message");
+              msgDiv.textContent = `${msg.user}: ${msg.message}`;
+
+              if (msg.user === "User1") {
+                msgDiv.classList.add("sent");
+                chat1.appendChild(msgDiv);
+                chat2.appendChild(msgDiv.cloneNode(true));
+              } else {
+                msgDiv.classList.add("received");
+                chat1.appendChild(msgDiv.cloneNode(true));
+                chat2.appendChild(msgDiv);
+              }
+            });
+          })
+          .catch((error) => console.error("Error loading messages:", error));
+      }
+
+      function handleKeyPress(event, user, inputId) {
+        if (event.key === "Enter") {
+          sendMessage(user, inputId);
+        }
+      }
+
+      setInterval(loadMessages, 1000);
+      loadMessages();
+    </script>
+  </body>
+</html>
