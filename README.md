@@ -53,11 +53,11 @@ ChatRoom/
 
 ## 🏆 Why Use ChatRoom?
 ✨ Quick Setup – No database required, just clone & run!<br>
-✨ Fast & Lightweight – Simple yet effective chat system.
-✨ Beginner-Friendly – Great for learning frontend-backend integration.
-✨ Open Source – Contribute, modify, and improve the project!
+✨ Fast & Lightweight – Simple yet effective chat system.<br>
+✨ Beginner-Friendly – Great for learning frontend-backend integration.<br>
+✨ Open Source – Contribute, modify, and improve the project!<br>
 
 ## 🔥 Future Enhancements
-🔹 User Authentication – Secure login system for personalized chat.
-🔹 Database Integration – Move from JSON to MySQL for scalable storage.
-🔹 UI Enhancements – Improved styling and themes for better UX.
+🔹 User Authentication – Secure login system for personalized chat.<br>
+🔹 Database Integration – Move from JSON to MySQL for scalable storage.<br>
+🔹 UI Enhancements – Improved styling and themes for better UX.<br>
